@@ -33,6 +33,7 @@ serialPort = serial.Serial(arduinoComPort, baudRate, timeout=1)
 #
 # main loop to read data from the Arduino, then display it
 #
+
 while True:
   #
   # ask for a line of data from the serial port, the ".decode()" converts the
@@ -44,15 +45,4 @@ while True:
   # check if data was received
   #
   if len(lineOfData) > 0:
-    #
-    # data was received, convert it into 4 integers
-    #
-    # sensor, b, c, d = (int(x) for x in lineOfData.split(','))
     print(lineOfData)
-    #
-    # print the results
-    #
-    # print("a = " + str(a), end="")
-    # print(", b = " + str(b), end="")
-    # print(", c = " + str(c), end="")
-    # print(", d = " + str(d))
