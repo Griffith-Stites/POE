@@ -59,7 +59,7 @@ def saveData(dataList):
         rho, phi = getPolar(d)
         points.append(polarToCart(rho, phi))
 
-    print(points)
+    # Need to save data to a file than analyze
 
 serialPort = setupSerial()
 dataList = acquireData(serialPort)
