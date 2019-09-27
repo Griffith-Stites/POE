@@ -19,7 +19,7 @@ void setup() {
 void loop() {
   for (pan = 0; pan <= 60; pan += 1) { // goes from 0 degrees to 60 degrees in steps of 1 degree
     servo1.write(pan + 60); // tell servo1 to go to position in variable 'pan'
-//    delay(15); // waits 15ms for the servo to reach the position
+    //    delay(15); // waits 15ms for the servo to reach the position
     delay(100); // waits 100ms for the sensor power to fluctuate, 40ms according to the datasheet, 100ms for good measure
     sensorValue = analogRead(analogInPin); // read the sensnor value
     printStatus(sensorValue, pan, 1);
