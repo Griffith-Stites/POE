@@ -30,7 +30,7 @@ def getPolar(data):
     returns: polar coordinate"""
     result = data.split(',') # split by comma into list
     rho = analogToDistance(float(result[0]))
-    phi = float(result[1])
+    phi = int(result[1])
 
     return (rho, phi) # only returning 2d, will need spherical
 
@@ -53,7 +53,7 @@ def acquireData(serialPort):
     return dataList
 
 def saveData(dataList):
-    """Convert the data to coordinates and save"""
+    """Convert the data to coordinates and save to a file"""
     points = []
     for d in dataList:
         rho, phi = getPolar(d)
@@ -63,4 +63,4 @@ def saveData(dataList):
 
 serialPort = setupSerial()
 dataList = acquireData(serialPort)
-savaData(dataList)
+saveData(dataList)
