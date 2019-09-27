@@ -1,4 +1,5 @@
 import serial
+import numpy as np
 
 def setupSerial(arduinoComPort = "/dev/ttyACM0", baudRate = 9600):
     """Open the serial port"""
@@ -14,40 +15,52 @@ def checkData(serialPort):
     else:
         return "none"
 
-def parseData(data):
-    """Parse one point of data
-    data: One data point, raw from the arduino
-    returns: x, y, z coordinate"""
-    result = data.split(',') # split by comma into list
-    return getCoord(result[0], result[1], result[2])
+def analogToDistance(analog):
+    """Convert an analog reading from the IR
+    distance sensor to inches
+    analog: Analog reading
+    returns: distance in inches"""
+    return 5805.99102955023*(analog**-1.03380467328515)
 
-def getCoord(distance, angle1, angle2):
-    """Determine the coordinate
+def getPolar(data):
+    """Determine the polar coordinate from one point of data
     distance: distance from the laser
-    angle1: angle on axis 1
-    angle2: angle on axis 2
+    pan: pan angle
+    tilt: tilt angle
+    returns: polar coordinate"""
+    result = data.split(',') # split by comma into list
+    rho = analogToDistance(float(result[0]))
+    phi = float(result[1])
 
-    returns: x, y, z coordinate"""
-    return (distance, angle1, angle2)
+    return (rho, phi) # only returning 2d, will need spherical
 
+def polarToCart(rho, phi):
+    x = rho * np.cos(phi)
+    y = rho * np.sin(phi)
+    return(x, y)
+
+def acquireData(serialPort):
+    """Acquire data from the arduino"""
+    dataList = [] # list of the raw analogRead, data1, data2
+    running = True
+    while running:
+        data = checkData(serialPort)
+        # print(data)
+        if (data == "finished"): # stop code from arduino
+            running = False # stop the loop
+        elif (data != "none"): # if there is a data point
+            dataList.append(data)
+    return dataList
+
+def saveData(dataList):
+    """Convert the data to coordinates and save"""
+    points = []
+    for d in dataList:
+        rho, phi = getPolar(d)
+        points.append(polarToCart(rho, phi))
+
+    print(points)
 
 serialPort = setupSerial()
-# main loop to read data from the Arduino, then display it
-dataList = [] # list of the raw analogRead, data1, data2
-running = True
-while running:
-    data = checkData(serialPort)
-    print(data)
-    if (data == "finished"): # stop code from arduino
-        running = False # stop the loop
-    elif (data != "none"): # if there is a data point
-        dataList.append(data)
-
-points = [] #
-for d in dataList:
-    parseData(d)
-
-# ask for a line of data from the serial port, the ".decode()" converts the
-# data from an "array of bytes", to a string
-lineOfData = serialPort.readline().decode()
-# check if data was received
+dataList = acquireData(serialPort)
+savaData(dataList)
