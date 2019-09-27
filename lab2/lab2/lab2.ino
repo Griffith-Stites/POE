@@ -17,6 +17,7 @@ void setup() {
 }
 
 void loop() {
+  Serial.println("start");
   for (pan = 0; pan <= 60; pan += 1) { // goes from 0 degrees to 60 degrees in steps of 1 degree
     servo1.write(pan + 60); // tell servo1 to go to position in variable 'pan'
     //    delay(15); // waits 15ms for the servo to reach the position

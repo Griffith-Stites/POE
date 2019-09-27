@@ -1,5 +1,6 @@
 import serial
 import numpy as np
+import pickle
 
 def setupSerial(arduinoComPort = "/dev/ttyACM0", baudRate = 9600):
     """Open the serial port"""
@@ -29,6 +30,7 @@ def getPolar(data):
     tilt: tilt angle
     returns: polar coordinate"""
     result = data.split(',') # split by comma into list
+    print(result)
     rho = analogToDistance(float(result[0]))
     phi = int(result[1])
 
@@ -46,6 +48,7 @@ def acquireData(serialPort):
     while running:
         data = checkData(serialPort)
         # print(data)
+        print(data)
         if (data == "finished"): # stop code from arduino
             running = False # stop the loop
         elif (data != "none"): # if there is a data point
@@ -58,9 +61,17 @@ def saveData(dataList):
     for d in dataList:
         rho, phi = getPolar(d)
         points.append(polarToCart(rho, phi))
-
+    f = open('lab2/data.txt', 'wb') # create file
+    pickle.dump(points, f)
     # Need to save data to a file than analyze
 
 serialPort = setupSerial()
+
+wait = True
+while wait:
+    data = checkData(serialPort)
+    if (data == "start"):
+        wait = False
+
 dataList = acquireData(serialPort)
 saveData(dataList)
