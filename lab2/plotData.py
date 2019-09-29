@@ -4,13 +4,12 @@ import matplotlib.pyplot as plt
 import pickle
 
 objects = []
-with open('data.txt', 'rb') as openfile:
+with open('lab2/data.txt', 'rb') as openfile:
     while True:
         try:
             objects.append(pickle.load(openfile))
         except EOFError:
             break
-
 objects = objects[0]
 # print(objects[0][1])
 
