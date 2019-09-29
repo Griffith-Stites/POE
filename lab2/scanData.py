@@ -21,24 +21,24 @@ def analogToDistance(analog):
     distance sensor to inches
     analog: Analog reading
     returns: distance in inches"""
-    return 5805.99102955023*(analog**-1.03380467328515)
-
+    # return 5805.99102955023*(analog**-1.03380467328515)
+    return 2213662.429886*(analog**-2.0598068054896)
+    
 def getPolar(data):
     """Determine the polar coordinate from one point of data
     distance: distance from the laser
-    pan: pan angle
-    tilt: tilt angle
+    pan: pan angle in degrees
+    tilt: tilt angle in degrees
     returns: polar coordinate"""
     result = data.split(',') # split by comma into list
-    print(result)
-    rho = analogToDistance(float(result[0]))
-    phi = int(result[1])
+    radius = analogToDistance(float(result[0]))
+    pan = int(result[1])
+    print (radius, pan)
+    return (radius, pan) # only returning 2d, will need spherical
 
-    return (rho, phi) # only returning 2d, will need spherical
-
-def polarToCart(rho, phi):
-    x = rho * np.cos(phi)
-    y = rho * np.sin(phi)
+def polarToCart(radius, pan):
+    x = radius * np.cos(np.radians(pan))
+    y = radius * np.sin(np.radians(pan))
     return(x, y)
 
 def acquireData(serialPort):
@@ -59,11 +59,15 @@ def saveData(dataList):
     """Convert the data to coordinates and save to a file"""
     points = []
     for d in dataList:
-        rho, phi = getPolar(d)
-        points.append(polarToCart(rho, phi))
+        radius, pan = getPolar(d)
+        points.append(polarToCart(radius, pan))
     f = open('lab2/data.txt', 'wb') # create file
     pickle.dump(points, f)
     # Need to save data to a file than analyze
+
+    file = open('raw.txt', 'w')
+    file.write(str(dataList))
+    file.close()
 
 serialPort = setupSerial()
 
