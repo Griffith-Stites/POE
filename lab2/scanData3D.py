@@ -29,18 +29,18 @@ def getSpherical(data):
     returns: spherical coordinate as tuple"""
     result = data.split(',') # split by comma into list
     radius = analogToDistance(float(result[0]))
-    delta = int(result[1]) # pan angle
-    phi = int(result[2]) # tilt angle
-    return (radius, delta, phi)
+    pan = np.radians(int(result[1])) # pan angle in rads
+    tilt = np.radians(int(result[2])) # tilt angle in rads
+    return (radius, pan, tilt)
 
 def sphericalToCart(polar):
     """Convert spherical coordinates to cartesion coordinates.
-    polar: tuple with radius, delta, and phi
+    polar: tuple with radius, pan, tilt angle in radians
     returns: cartesion coordinate as tuple"""
-    radius, delta, phi = polar
-    x = radius * np.sin(phi) * np.cos(delta)
-    y = radius * np.sin(phi) * np.sin(delta)
-    z = radius * np.cos(phi)
+    radius, pan, tilt = polar
+    x = radius * np.sin(tilt) * np.cos(pan)
+    y = radius * np.sin(tilt) * np.sin(pan)
+    z = radius * np.cos(tilt)
     return(x, y, z)
 
 def acquireData(serialPort):
@@ -61,8 +61,8 @@ def saveData(dataList):
     """Convert the data to coordinates and save to a file"""
     points = []
     for d in dataList:
-        polar = getPolar(d)
-        points.append(polarToCart(polar))
+        sphere = getSpherical(d)
+        points.append(sphericalToCart(sphere))
     f = open('lab2/data.txt', 'wb') # create file
     pickle.dump(points, f)
     # Need to save data to a file than analyze
