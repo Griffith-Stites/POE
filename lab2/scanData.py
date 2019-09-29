@@ -21,9 +21,9 @@ def analogToDistance(analog):
     distance sensor to inches
     analog: Analog reading
     returns: distance in inches"""
-    # return 5805.99102955023*(analog**-1.03380467328515)
-    return 2213662.429886*(analog**-2.0598068054896)
-    
+    return 5805.99102955023*(analog**-1.03380467328515)
+    # return 2213662.429886*(analog**-2.0598068054896)
+
 def getPolar(data):
     """Determine the polar coordinate from one point of data
     distance: distance from the laser
