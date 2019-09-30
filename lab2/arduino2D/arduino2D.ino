@@ -23,7 +23,7 @@ void setup() {
 
 void loop() {
   Serial.println("start");
-  for (pan = 80; pan <= 110; pan += 1) { // goes from 0 degrees to 60 degrees in steps of 1 degree
+  for (pan = 70; pan <= 110; pan += 1) { // goes from 0 degrees to 60 degrees in steps of 1 degree
     servo1.write(pan); // tell servo1 to go to position in variable 'pan'
     delay(100); // waits 100ms for the sensor power to fluctuate, 40ms according to the datasheet, 100ms for good measure
     sensorValue = readSensor();

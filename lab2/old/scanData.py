@@ -21,27 +21,25 @@ def analogToDistance(analog):
     distance sensor to inches
     analog: Analog reading
     returns: distance in inches"""
-    return 5805.99102955023*(analog**-1.03380467328515)
+    # return 5805.99102955023*(analog**-1.03380467328515)
+    return 2213662.429886*(analog**-2.0598068054896)
 
-def getSpherical(data):
+def getPolar(data):
     """Determine the polar coordinate from one point of data
-    data: one line of data with distance, pan, and tilt
-    returns: spherical coordinate as tuple"""
+    distance: distance from the laser
+    pan: pan angle in degrees
+    tilt: tilt angle in degrees
+    returns: polar coordinate"""
     result = data.split(',') # split by comma into list
     radius = analogToDistance(float(result[0]))
-    pan = np.radians(int(result[1])) # pan angle in rads
-    tilt = np.radians(int(result[2])) # tilt angle in rads
-    return (radius, pan, tilt)
+    pan = int(result[1])
+    print (radius, pan)
+    return (radius, pan) # only returning 2d, will need spherical
 
-def sphericalToCart(polar):
-    """Convert spherical coordinates to cartesion coordinates.
-    polar: tuple with radius, pan, tilt angle in radians
-    returns: cartesion coordinate as tuple"""
-    radius, pan, tilt = polar
-    x = radius * np.sin(tilt) * np.cos(pan)
-    y = radius * np.sin(tilt) * np.sin(pan)
-    z = radius * np.cos(tilt)
-    return(x, y, z)
+def polarToCart(radius, pan):
+    x = radius * np.cos(np.radians(pan))
+    y = radius * np.sin(np.radians(pan))
+    return(x, y)
 
 def acquireData(serialPort):
     """Acquire data from the arduino"""
@@ -61,11 +59,15 @@ def saveData(dataList):
     """Convert the data to coordinates and save to a file"""
     points = []
     for d in dataList:
-        sphere = getSpherical(d)
-        points.append(sphericalToCart(sphere))
+        radius, pan = getPolar(d)
+        points.append(polarToCart(radius, pan))
     f = open('lab2/data.txt', 'wb') # create file
     pickle.dump(points, f)
     # Need to save data to a file than analyze
+
+    file = open('raw.txt', 'w')
+    file.write(str(dataList))
+    file.close()
 
 serialPort = setupSerial()
 
