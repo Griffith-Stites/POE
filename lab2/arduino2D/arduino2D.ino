@@ -26,23 +26,11 @@ void loop() {
   for (pan = 70; pan <= 110; pan += 1) { // goes from 0 degrees to 60 degrees in steps of 1 degree
     servo1.write(pan); // tell servo1 to go to position in variable 'pan'
     delay(100); // waits 100ms for the sensor power to fluctuate, 40ms according to the datasheet, 100ms for good measure
-    sensorValue = readSensor();
-    printStatus(sensorValue, pan, 1);
+      sensorValue = analogRead(analogInPin);
+      printStatus(sensorValue, pan, 1);
   }
   Serial.println("finished");
   delay(3000);
-}
-
-int readSensor(){
-  // read the sensor and average the results
-  read1 = analogRead(analogInPin); // read the sensor value
-  delay(15);
-  read2 = analogRead(analogInPin); // read the sensor value
-  delay(15);
-  read3 = analogRead(analogInPin); // read the sensor value
-  delay(15);
-  sensorValue = (read1 + read2 + read3) / 3;
-  return sensorValue;
 }
 
 void printStatus(int sensor, int pan, int tilt) {

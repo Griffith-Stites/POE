@@ -34,7 +34,9 @@ def saveData(data):
     points = []
     for d in data:
         sphere = getSpherical(d)
-        points.append(sphericalToCart(sphere))
+        a = sphericalToCart(sphere)
+        points.append(a)
+        print(a)
     f = open('lab2/data.txt', 'wb') # create file
     pickle.dump(points, f)
     # Need to save data to a file than analyze
@@ -48,3 +50,8 @@ with open('lab2/dataRaw', 'rb') as openfile:
             break
 data = data[0]
 saveData(data)
+
+# Plot known coordinates, data input
+
+# print(getSpherical("422, 20, 20"))
+# print(sphericalToCart(getSpherical("422, 20, 20")))
