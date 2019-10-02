@@ -26,8 +26,8 @@ ax = fig.add_subplot(111, projection='3d')
 
 ax.scatter(x, y, z, c='b', alpha=0.5)
 
-ax.set_xlabel('X Label')
-ax.set_ylabel('Y Label')
-ax.set_zlabel('Z Label')
+ax.set_xlabel('X')
+ax.set_ylabel('Y')
+ax.set_zlabel('Z')
 
 plt.show()
