@@ -67,24 +67,4 @@ void loop() {
   }
 
   // put your main code here, to run repeatedly:
-
-  // 500
-  if (sensorLeft > 450) {
-    // turn left
-    motorLeft->setSpeed(0);
-    motorRight->setSpeed(20);
-    delay(300);
-  }
-  // 295
-  else if (sensorRight > 420) {
-    // turn right
-    motorLeft->setSpeed(20);
-    motorRight->setSpeed(0);
-    delay(300);
-  }
-  else {
-    Serial.print("HELLO");
-    motorLeft->setSpeed(20);
-    motorRight->setSpeed(20);
-  }
 }
