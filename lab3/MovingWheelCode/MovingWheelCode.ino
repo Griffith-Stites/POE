@@ -19,26 +19,35 @@ Adafruit_DCMotor *motorLeft = AFMS.getMotor(3);
 void setup() {
   // put your setup code here, to run once:
   AFMS.begin();
-  motorLeft->setSpeed(15);
-  motorRight->setSpeed(15);
+  motorLeft->setSpeed(20);
+  motorRight->setSpeed(20);
+  Serial.begin(9600);
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
   sensorLeft = analogRead(sensorLeftPin);
   sensorRight = analogRead(sensorRightPin);
-
+  Serial.print("sensorLeft = ");
+  Serial.println(sensorLeft);
+  Serial.print("sensorRight = ");
+  Serial.println(sensorRight);
+  // 500
   if (sensorLeft > 500) {
     // turn right
     motorRight->setSpeed(0);
+    delay(300);
   }
-  else if (sensorRight > 295) {
+  // 295
+  else if (sensorRight > 400) {
     // turn left
     motorLeft->setSpeed(0);
+    delay(300);
   }
   else {
-    motorLeft->setSpeed(15);
-    motorRight->setSpeed(15);
+    Serial.print("HELLO");
+    motorLeft->setSpeed(20);
+    motorRight->setSpeed(20);
     motorLeft->run(BACKWARD);
     motorRight->run(BACKWARD);
   }
