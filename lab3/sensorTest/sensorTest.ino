@@ -21,8 +21,8 @@
 */
 
 // These constants won't change. They're used to give names to the pins used:
-const int sensorLeftPin = A0;
-const int sensorRightPin = A1;
+const int sensorLeftPin = A1;
+const int sensorRightPin = A0;
 
 int sensorLeft = 0;
 int sensorRight = 0;
