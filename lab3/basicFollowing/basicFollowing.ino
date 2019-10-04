@@ -33,7 +33,36 @@ void loop() {
   Serial.println(sensorLeft);
   Serial.print("sensorRight = ");
   Serial.println(sensorRight);
+  // if in even farther left and off, go right
 
+  //  if (sensorLeft < 290 && sensorRight < 420) {
+  //    // if on the line
+  //  }
+
+  //  if (sensorLeft < 65 && sensorRight > 420) {
+  //    // if slightly to the left
+  //    Serial.println("RIGHT");
+  //    motorRight->setSpeed(0);
+  //    delay(300);
+  //  }
+  //  else if (sensorLeft > 470 && sensorRight < 420) {
+  //    // if slightly to the right
+  //    Serial.println("LEFT");
+  //    motorLeft->setSpeed(0);
+  //    delay(300);
+  //  }
+  //  else {
+  //    // go forward
+  //    Serial.println("FORWARD");
+  //    motorLeft->setSpeed(20);
+  //    motorRight->setSpeed(20);
+  //    motorLeft->run(BACKWARD);
+  //    motorRight->run(BACKWARD);
+  //  }
+
+  // put your main code here, to run repeatedly:
+
+  // 500
   if (sensorLeft > 450) {
     // turn left
     motorLeft->setSpeed(0);
