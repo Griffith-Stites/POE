@@ -12,59 +12,77 @@ const int sensorRightPin = A0;
 int sensorLeft = 0;
 int sensorRight = 0;
 
+int state = 0; // state of the robot (0: on line, -1: left of line, 1: right of line)
+
 Adafruit_MotorShield AFMS = Adafruit_MotorShield();
 Adafruit_DCMotor *motorRight = AFMS.getMotor(2);
 Adafruit_DCMotor *motorLeft = AFMS.getMotor(3);
 
+// functions to go to the right, straight, and left
+// able to control speed over serial
+
 void setup() {
   // put your setup code here, to run once:
   AFMS.begin();
-  motorLeft->setSpeed(20);
-  motorRight->setSpeed(20);
+  motorLeft->setSpeed(25);
+  motorRight->setSpeed(25);
   motorLeft->run(BACKWARD);
   motorRight->run(BACKWARD);
   Serial.begin(9600);
 }
 
 void loop() {
-  sensorLeft = analogRead(sensorLeftPin);
-  sensorRight = analogRead(sensorRightPin);
-  Serial.print("sensorLeft = ");
-  Serial.println(sensorLeft);
-  Serial.print("sensorRight = ");
-  Serial.println(sensorRight);
-  // if in even farther left and off, go right
+    sensorLeft = analogRead(sensorLeftPin);
+    sensorRight = analogRead(sensorRightPin);
+  //  Serial.print("sensorLeft = ");
+  //  Serial.println(sensorLeft);
+  //  Serial.print("sensorRight = ");
+  //  Serial.println(sensorRight);
 
-  //  if (sensorLeft < 290 && sensorRight < 420) {
-  //    // if on the line
-  //  }
-
-  // have a state of the last one
-  // if it goes off, we can use the integer 
-  // if it was too
-
-  // if off the line, look at the last state, correct that direction
-
-  if (sensorLeft < 65 && sensorRight > 420) {
+  if (sensorLeft < 100 && sensorRight > 300) {
     // if slightly to the left, turn right
-    Serial.println("RIGHT");
-    motorLeft->setSpeed(20);
-    motorRight->setSpeed(0);
-    delay(100);
+    state = turnR();
   }
   else if (sensorLeft > 450 && sensorRight < 420) {
     // if slightly to the right, turn left
-    Serial.println("LEFT");
-    motorLeft->setSpeed(0);
-    motorRight->setSpeed(20);
-    delay(100);
+    state = turnL();
+  }
+  else if (sensorLeft < 100 && sensorRight < 400) {
+    // if off the line
+    Serial.println("FAILSAFE");
+    if (state == -1) { // if went off to the left
+      state = turnR();
+    }
+    else if (state == 1) { // if went off to the right
+      state = turnL();
+    }
   }
   else {
-    // go forward
-    Serial.println("FORWARD");
-    motorLeft->setSpeed(20);
-    motorRight->setSpeed(20);
+    straight();
   }
 
   // put your main code here, to run repeatedly:
+}
+
+int turnR() {
+  Serial.println("RIGHT");
+  motorLeft->setSpeed(35);
+  motorRight->setSpeed(0);
+  delay(100);
+  return -1;
+}
+int turnL() {
+  Serial.println("LEFT");
+  motorLeft->setSpeed(0);
+  motorRight->setSpeed(35);
+  delay(100);
+  return 1;
+}
+
+void straight() {
+  // go forward
+  Serial.println("FORWARD");
+  motorLeft->setSpeed(25);
+  motorRight->setSpeed(25);
+  delay(100);
 }
