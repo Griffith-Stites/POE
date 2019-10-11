@@ -13,18 +13,15 @@ int sensorRight = 0;
 
 // speed initialization
 int speed = 25;
-int leftWheelSpeed = 25;
-int rightWheelSpeed = 25;
-//String speedstring = 'yep';
+int leftWheelSpeed = speed;
+int rightWheelSpeed = speed;
 
-int state = 0; // state of the robot (0: on line, -1: left of line, 1: right of line)
+int state = 0; // state of the robot (-1: left of line, 1: right of line)
 
+// initialize the motors
 Adafruit_MotorShield AFMS = Adafruit_MotorShield();
 Adafruit_DCMotor *motorRight = AFMS.getMotor(2);
 Adafruit_DCMotor *motorLeft = AFMS.getMotor(3);
-
-// functions to go to the right, straight, and left
-// able to control speed over serial
 
 void setup() {
   // put your setup code here, to run once:
@@ -38,13 +35,12 @@ void setup() {
 
 void loop() {
     if (Serial.available() > 0) {    // is a character available?
-      speed = Serial.readString().toInt();
-//      Serial.println(speed);
-    }   // get the character
- 
+      speed = Serial.readString().toInt(); // read the number and set it to speed
+    }
+
+    // Print the sensor data, wheel speeds, andd time
     sensorLeft = analogRead(sensorLeftPin);
     sensorRight = analogRead(sensorRightPin);
-  //  Serial.print("sensorLeft = ");
     Serial.print(sensorLeft);
     Serial.print(",");
     Serial.print(sensorRight);
@@ -54,8 +50,6 @@ void loop() {
     Serial.print(rightWheelSpeed);
     Serial.print(",");
     Serial.println(millis());
-  //  Serial.print("sensorRight = ");
-  //  Serial.println(sensorRight);
 
   if (sensorLeft < 100 && sensorRight > 300) {
     // if slightly to the left, turn right
@@ -67,7 +61,6 @@ void loop() {
   }
   else if (sensorLeft < 100 && sensorRight < 400) {
     // if off the line
-//    Serial.println("FAILSAFE");
     if (state == -1) { // if went off to the left
       state = turnR();
     }
@@ -78,14 +71,9 @@ void loop() {
   else {
     straight();
   }
-
-  // put your main code here, to run repeatedly:
 }
 
 int turnR() {
-//  Serial.println("RIGHT");
-//  Serial.println(speed);
-//  Serial.print("speed");
   leftWheelSpeed = speed + 10;
   rightWheelSpeed = 0;
   motorLeft->setSpeed(leftWheelSpeed);
@@ -94,8 +82,6 @@ int turnR() {
   return -1;
 }
 int turnL() {
-//  Serial.println("LEFT");
-//  Serial.println(speed);
   rightWheelSpeed = speed + 10;
   leftWheelSpeed = 0;
   motorLeft->setSpeed(leftWheelSpeed);
@@ -105,8 +91,6 @@ int turnL() {
 }
 
 void straight() {
-  // go forward
-//  Serial.println("FORWARD");
   leftWheelSpeed = speed;
   rightWheelSpeed = speed;
   motorLeft->setSpeed(leftWheelSpeed);
